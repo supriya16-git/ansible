@@ -1,0 +1,10 @@
+---
+# configuring tomcat
+
+- name: "Install Apache Tomcat"
+  hosts: my_server1
+  become: true
+  roles: 
+    - tomcat
+
+ 
