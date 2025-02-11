@@ -65,21 +65,13 @@
   notify: 
       - reload systemd
       - restart tomcat 
-
-- name: "Allow remote access to Tomcat Manager"
-  replace:
-    path: "{{ install_dir }}/webapps/manager/META-INF/context.xml"
-    regexp: '(<Valve className="org.apache.catalina.valves.RemoteAddrValve".*?/>)'
-    replace: '<!-- Removed access restriction -->'
-  notify:  
-      - reload systemd
-      - restart tomcat
-
-- name: "Allow remote access to Tomcat Host Manager"
-  replace:
-    path: "{{ install_dir }}/webapps/host-manager/META-INF/context.xml"
-    regexp: '<Valve className="org.apache.catalina.valves.RemoteAddrValve".*?/>'
-    replace: '<!-- Removed access restriction -->'
+- name: "copying teh contex.xml file"
+  copy:
+    src: "contex.xml"
+    dest: "/opt/tomcat/webapps/{{ item }}/META-INF/context.xml"
+  loop:
+    - manager
+    - host-manager  
   notify:  
       - reload systemd
       - restart tomcat
