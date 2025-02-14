@@ -6,7 +6,7 @@ pipeline {
   stages {
     stage('checkout code') {
       steps {
-        checout scm
+        checkout scm
       }
   }
     stage('prepare inventory') {
