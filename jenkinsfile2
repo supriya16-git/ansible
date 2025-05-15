@@ -1,0 +1,28 @@
+pipeline {
+  agent { label 'ansible' }
+  parameters {
+    string(name: 'target_ip', defaultValue: '', description: 'Target node IP')
+  }
+  stages {
+    stage('checkout code') {
+      steps {
+        checkout scm
+      }
+  }
+    stage('prepare inventory') {
+      steps {
+        sh """
+        echo '[my_server3]' > inventory.ini
+        echo '${params.target_ip} ansible_ssh_user=ubuntu ansible_ssh_private_key_file=/home/ubuntu/.ssh/id_rsa ansible_ssh_common_args=\"-o StrictHostKeyChecking=no\"' >> inventory.ini
+        """
+      }
+    }
+    stage('run ansible playbook') {
+      steps {
+        sh "ansible-playbook -i inventory.ini jenkinspb.yml"
+      }
+    }
+  }
+}
+
+            
