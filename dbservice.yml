@@ -1,0 +1,9 @@
+---
+- name: Configure Database
+  hosts: my_server1
+  vars_files:
+    - pass.yml
+  tasks:
+    - name: Set database password
+      debug:
+        msg: "{{ db_password }}"

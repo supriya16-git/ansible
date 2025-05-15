@@ -1,0 +1,43 @@
+---
+- name: "playbook to practice"
+  hosts: my_server1
+  become: true
+  vars: mypath = "/home/ubuntu"
+  tasks:
+    - name: "Run set of shell commands"
+      command:
+        name: "{{ item }}"
+      loop:
+          - ls
+          - pwd
+          - whoami
+      tags:
+        hey
+
+    - name: "creating a file"
+      file:
+        path: "{{ mypath }}/sup1"
+        mode: 0644
+
+    - name: "copying files"
+      copy:
+        scr: "{{ mypath }}/{{ item.src }}"
+        dest: "{{ mypath }}/{{ item.dest}}"
+      loop:
+        - { src: "job1", dest: "call1" }
+        - { src: "job2", dest: "call2" }
+      tags:
+        hey  
+
+    - name: "starting a service"
+      service:
+        name: ssh
+        state: started
+
+    - name: "Check service status"
+      command: systemctl is-active ssh
+      register: ssh_status
+
+    - name: "display service status output"
+      debug:
+        msg: "ssh service is curentlt {{ ssh_status.stadout }}"
